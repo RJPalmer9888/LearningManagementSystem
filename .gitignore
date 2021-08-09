@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Prevent Sensitive Data from being Submitted to GitHub
+/LearningMS.MVC/Configs
