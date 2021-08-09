@@ -46,10 +46,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -168,6 +168,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
@@ -183,6 +184,50 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\css\flex-slider.css" />
+    <Content Include="assets\css\fontawesome.css" />
+    <Content Include="assets\css\lightbox.css" />
+    <Content Include="assets\css\owl.css" />
+    <Content Include="assets\css\templatemo-grad-school.css" />
+    <Content Include="assets\fonts\flexslider-icon.svg" />
+    <Content Include="assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="assets\fonts\slick.svg" />
+    <Content Include="assets\images\author-01.png" />
+    <Content Include="assets\images\author-02.png" />
+    <Content Include="assets\images\author-03.png" />
+    <Content Include="assets\images\author-04.png" />
+    <Content Include="assets\images\author-05.png" />
+    <Content Include="assets\images\choose-us-image-01.png" />
+    <Content Include="assets\images\choose-us-image-02.png" />
+    <Content Include="assets\images\choose-us-image-03.png" />
+    <Content Include="assets\images\choosing-bg.jpg" />
+    <Content Include="assets\images\close.png" />
+    <Content Include="assets\images\coming-soon-bg.jpg" />
+    <Content Include="assets\images\contact-bg.jpg" />
+    <Content Include="assets\images\course-video.mp4" />
+    <Content Include="assets\images\courses-01.jpg" />
+    <Content Include="assets\images\courses-02.jpg" />
+    <Content Include="assets\images\courses-03.jpg" />
+    <Content Include="assets\images\courses-04.jpg" />
+    <Content Include="assets\images\courses-05.jpg" />
+    <Content Include="assets\images\courses-bg.jpg" />
+    <Content Include="assets\images\loading.gif" />
+    <Content Include="assets\images\main-slider-01.jpg" />
+    <Content Include="assets\images\main-slider-02.jpg" />
+    <Content Include="assets\images\main-slider-03.jpg" />
+    <Content Include="assets\images\main-thumb.png" />
+    <Content Include="assets\images\next.png" />
+    <Content Include="assets\images\prev.png" />
+    <Content Include="assets\images\video-bg.jpg" />
+    <Content Include="assets\images\video-thumb-01.jpg" />
+    <Content Include="assets\images\video-thumb-02.jpg" />
+    <Content Include="assets\js\custom.js" />
+    <Content Include="assets\js\isotope.min.js" />
+    <Content Include="assets\js\lightbox.js" />
+    <Content Include="assets\js\owl-carousel.js" />
+    <Content Include="assets\js\slick-slider.js" />
+    <Content Include="assets\js\tabs.js" />
+    <Content Include="assets\js\video.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -194,6 +239,75 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Configs\connections.config" />
+    <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="vendor\jquery\jquery.js" />
+    <Content Include="vendor\jquery\jquery.min.js" />
+    <Content Include="vendor\jquery\jquery.slim.js" />
+    <Content Include="vendor\jquery\jquery.slim.min.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\css\flex-slider.css" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\css\fontawesome.css" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\css\lightbox.css" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\css\owl.css" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\css\templatemo-grad-school.css" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\flexslider-icon.svg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\slick.svg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\author-01.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\author-02.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\author-03.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\author-04.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\author-05.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\choose-us-image-01.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\choose-us-image-02.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\choose-us-image-03.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\choosing-bg.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\close.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\coming-soon-bg.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\contact-bg.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\course-video.mp4" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\courses-01.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\courses-02.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\courses-03.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\courses-04.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\courses-05.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\courses-bg.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\loading.gif" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\main-slider-01.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\main-slider-02.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\main-slider-03.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\main-thumb.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\next.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\prev.png" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\video-bg.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\video-thumb-01.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\images\video-thumb-02.jpg" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\custom.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\isotope.min.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\lightbox.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\owl-carousel.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\slick-slider.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\tabs.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\js\video.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\index.html" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\jquery\jquery.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\jquery\jquery.min.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\jquery\jquery.slim.js" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\jquery\jquery.slim.min.js" />
+    <Content Include="assets\fonts\Flaticon.woff" />
+    <Content Include="assets\fonts\flexslider-icon.eot" />
+    <Content Include="assets\fonts\flexslider-icon.ttf" />
+    <Content Include="assets\fonts\flexslider-icon.woff" />
+    <Content Include="assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="assets\fonts\FontAwesome.otf" />
+    <Content Include="assets\fonts\slick.eot" />
+    <Content Include="assets\fonts\slick.ttf" />
+    <Content Include="assets\fonts\slick.woff" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -252,6 +366,29 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Courses\Create.cshtml" />
+    <Content Include="Views\Courses\Delete.cshtml" />
+    <Content Include="Views\Courses\Details.cshtml" />
+    <Content Include="Views\Courses\Edit.cshtml" />
+    <Content Include="Views\Courses\Index.cshtml" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\Flaticon.woff" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\flexslider-icon.eot" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\flexslider-icon.ttf" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\flexslider-icon.woff" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\FontAwesome.otf" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\slick.eot" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\slick.ttf" />
+    <Content Include="_Archive\templatemo_557_grad_school\assets\fonts\slick.woff" />
+    <Content Include="_Archive\templatemo_557_grad_school\prepros-6.config" />
+    <Content Include="_Archive\templatemo_557_grad_school\prepros.config" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\jquery\jquery.min.map" />
+    <Content Include="_Archive\templatemo_557_grad_school\vendor\jquery\jquery.slim.min.map" />
+    <Content Include="vendor\jquery\jquery.min.map" />
+    <Content Include="vendor\jquery\jquery.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -268,6 +405,12 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LearningMS.DATA\LearningMS.DATA.csproj">
+      <Project>{9baf7686-18ea-429e-b3ab-d0e3fc46a98c}</Project>
+      <Name>LearningMS.DATA</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
