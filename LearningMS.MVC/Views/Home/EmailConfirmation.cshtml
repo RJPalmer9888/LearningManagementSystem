@@ -1,0 +1,19 @@
+﻿@model LearningMS.MVC.Models.ContactViewModel
+
+@{
+    ViewBag.Title = "EmailConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Email Confirmation</h2>
+
+    <h2>We recieved the following contact message:</h2>
+
+    <p>@Model.Message</p>
+
+    <h4>
+        Hey, thanks for your interest, @Model.Name! I'll respond to you at @Model.Email as soon as possible.
+        Thank you for reaching out!
+    </h4>
+
+</div>

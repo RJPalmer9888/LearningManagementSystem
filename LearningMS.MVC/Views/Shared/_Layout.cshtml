@@ -47,13 +47,12 @@
                 <li><a href="@Url.Action("Index","Courses")">Courses</a></li>
                 <!-- <li><a href="#section5">Video</a></li> -->
                 <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
-                <li><a href="https://templatemo.com" class="external">External</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- ***** Main Banner Area Start ***** -->
-    @RenderBody();
+    <div class="central">@RenderBody();</div>
     <!-- ***** Main Banner Area End ***** -->
 
     <footer>
@@ -75,7 +74,7 @@
     @RenderSection("scripts", false)
     <!-- Bootstrap core JavaScript -->
     <script src="~/vendor/jquery/jquery.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <script src="~/assets/js/isotope.min.js"></script>
     <script src="~/assets/js/owl-carousel.js"></script>
