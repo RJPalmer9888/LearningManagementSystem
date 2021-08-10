@@ -1,8 +1,14 @@
-﻿using LearningMS.MVC.Models;
+﻿using LearningMS.DATA;
+using LearningMS.MVC.Models;
+using LearningMS.MVC.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System;
+using System.Data.Entity;
+using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +18,8 @@ namespace LearningMS.MVC.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private LearningMSEntities db = new LearningMSEntities();
+
         public ManageController()
         {
         }
@@ -49,8 +57,15 @@ namespace LearningMS.MVC.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            LearningMSEntities deets = new LearningMSEntities();
+            var userInfo = deets.UserDetails.Where(lv => lv.UserId == userId).FirstOrDefault();
             var model = new IndexViewModel
             {
+                UserId = userId,
+                FirstName = userInfo.FirstName,
+                LastName = userInfo.LastName,
+                Photo = userInfo.Photo,
+                Email = User.Identity.GetUserName(),
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
@@ -58,6 +73,73 @@ namespace LearningMS.MVC.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        public ActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserDetail userDetail = db.UserDetails.Find(id);
+            if (userDetail == null)
+            {
+                return HttpNotFound();
+            }
+            return View(userDetail);
+        }
+
+        // POST: UserDetails/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "UserId,FirstName,LastName,Photo,AnnualCompletions")] UserDetail userDetail, HttpPostedFileBase userPhoto)
+        {
+            if (ModelState.IsValid)
+            {
+                #region File Upload
+                string file = "NoImage.png";
+                if (userDetail.Photo != "NoImage.png" && userDetail.Photo != null)
+                {
+                    file = userDetail.Photo;
+                }
+
+                if (userPhoto != null)
+                {
+                    file = userPhoto.FileName;
+                    string ext = file.Substring(file.LastIndexOf('.'));
+                    string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
+
+                    //Check that the uploaded file is in our list of acceptable exts and file size <= 4mb max from ASP.NET
+                    if (goodExts.Contains(ext.ToLower()) && userPhoto.ContentLength <= 4194303)
+                    {
+                        //Create a new file name (using a GUID)
+                        file = Guid.NewGuid() + ext;
+
+                        #region Resize Image
+                        string savePath = Server.MapPath("~/imgstore/users/");
+
+                        Image convertedImage = Image.FromStream(userPhoto.InputStream);
+
+                        int maxImageSize = 500;
+
+                        int maxThumbSize = 100;
+
+                        ImageUtility.ResizeImage(savePath, file, convertedImage, maxImageSize, maxThumbSize);
+                        #endregion
+                    }
+
+                    //no matter what, update the PhotoUrl witht he value of the file variable
+                    
+                }
+                userDetail.Photo = file;
+                #endregion
+                db.Entry(userDetail).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(userDetail);
         }
 
         //

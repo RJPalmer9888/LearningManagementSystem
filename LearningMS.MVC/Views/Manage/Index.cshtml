@@ -1,77 +1,34 @@
 ﻿@model LearningMS.MVC.Models.IndexViewModel
 @{
-    ViewBag.Title = "Manage your account";
+    ViewBag.Title = "Your Profile";
 }
 
-<h2>@ViewBag.Title.</h2>
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div class="row">
-    <div class="col-md-8">
-        <p>
-            @(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword") 
-                : Html.ActionLink("Pick a password", "SetPassword"))
-        </p>
-        <p>
-            Phone Number: @(Model.PhoneNumber ?? "None") [
-            @if (Model.PhoneNumber != null)
-            {
-                @Html.ActionLink("Change", "AddPhoneNumber")
-                @: &nbsp;|&nbsp;
-                @Html.ActionLink("Remove", "RemovePhoneNumber")
-            }
-            else
-            {
-                @Html.ActionLink("Add", "AddPhoneNumber")
-            }
-            ]
-        </p>
-        <p>
-            External Logins: @Model.Logins.Count
-            @Html.ActionLink("[Manage]", "ManageLogins")
-        </p>
-        @if (Model.TwoFactor)
-        {
-            using (Html.BeginForm("DisableTFA", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-            {
-                 @Html.AntiForgeryToken()
-                 <p>
-                     Two factor is currently enabled:
-                     <input type="submit" value="Disable" class="btn btn-default"/>
-                 </p>
-            }
-        }
-        else
-        {
-            using (Html.BeginForm("EnableTFA", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-            {
-                @Html.AntiForgeryToken()
-                <p>
-                    Two factor is currently disabled:
-                    <input type="submit" value="Enable" class="btn btn-default"/>
-                </p>
-            }
-        }
-        @if (Model.BrowserRemembered)
-        {
-            using (Html.BeginForm("ForgetBrowser", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-            {
-                @Html.AntiForgeryToken()
-                <p>
-                    Browser is curently remembered for two factor:
-                    <input type="submit" value="Forget Browser" class="btn btn-default" />
-                </p>
-            }
-        }
-        else
-        {
-            using (Html.BeginForm("RememberBrowser", "Manage", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-            {
-                @Html.AntiForgeryToken()
-                <p>
-                    Browser is curently not remembered for two factor:
-                    <input type="submit" value="Remember Browser" class="btn btn-default"/>
-                </p>
-            }
-        }
+@*<div style="background-color:dimgray">*@
+    <div class="container" >
+        <h1>@ViewBag.Title</h1>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <p class="text-success">@ViewBag.StatusMessage</p>
+                <div class="row">
+                    <div class="col-md-8">
+                        
+                        <img src="~/imgstore/users/@Model.Photo" alt="@Model.Email" title="@Model.Email" width="100%"/>
+                        <h2>@Model.FirstName @Model.LastName</h2>
+                        <h5>@Model.Email</h5>
+
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.UserId })
+
+                        @(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword")
+                                                                                            : Html.ActionLink("Pick a password", "SetPassword"))
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="~/Images/bigol.jpg" width="60%"/>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,7 +1,11 @@
-﻿using LearningMS.MVC.Models;
+﻿using LearningMS.DATA;
+using LearningMS.MVC.Models;
+using LearningMS.MVC.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -145,7 +149,7 @@ namespace LearningMS.MVC.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, HttpPostedFileBase userPhoto)
         {
             if (ModelState.IsValid)
             {
@@ -153,11 +157,54 @@ namespace LearningMS.MVC.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    #region Dealing with custom user 
+                    UserDetail newUserDeets = new UserDetail();
+
+                    newUserDeets.UserId = user.Id;
+                    newUserDeets.FirstName = model.FirstName;
+                    newUserDeets.LastName = model.LastName;
+                    #region File Upload
+                    string file = "NoImage.png";
+
+                    if (userPhoto != null)
+                    {
+                        file = userPhoto.FileName;
+                        string ext = file.Substring(file.LastIndexOf('.'));
+                        string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
+
+                        //Check that the uploaded file is in our list of acceptable exts and file size <= 4mb max from ASP.NET
+                        if (goodExts.Contains(ext.ToLower()) && userPhoto.ContentLength <= 4194303)
+                        {
+                            //Create a new file name (using a GUID)
+                            file = Guid.NewGuid() + ext;
+
+                            #region Resize Image
+                            string savePath = Server.MapPath("~/imgstore/users/");
+
+                            Image convertedImage = Image.FromStream(userPhoto.InputStream);
+
+                            int maxImageSize = 500;
+
+                            int maxThumbSize = 100;
+
+                            ImageUtility.ResizeImage(savePath, file, convertedImage, maxImageSize, maxThumbSize);
+                            #endregion
+                        }
+
+                        //no matter what, update the PhotoUrl witht he value of the file variable
+                        
+                    }
+                    newUserDeets.Photo = file;
+                    #endregion
+                    LearningMSEntities db = new LearningMSEntities();
+                    db.UserDetails.Add(newUserDeets);
+                    db.SaveChanges();
+                    #endregion
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     ViewBag.Link = callbackUrl;
-                    return View("DisplayEmail");
+                    return Redirect("Login");
                 }
                 AddErrors(result);
             }

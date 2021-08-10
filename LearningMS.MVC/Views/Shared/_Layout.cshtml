@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900" rel="stylesheet">
 
-    <title>Grad School HTML5 Template</title>
+    <title>Vanguardchives</title>
 
     <!-- Bootstrap core CSS -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
     <!--header-->
     <header class="main-header clearfix" role="header">
         <div class="logo">
-            <a href="#"><em>Grad</em> School</a>
+            <a href="#"><em>Vanguard</em>chives</a>
         </div>
         <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
         <nav id="menu" class="main-nav" role="navigation">
@@ -45,8 +45,9 @@
 
                 </li>
                 <li><a href="@Url.Action("Index","Courses")">Courses</a></li>
-                <!-- <li><a href="#section5">Video</a></li> -->
+                <li><a href="@Url.Action("Index","Lessons")">Lessons</a></li>
                 <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                @Html.Partial("_LoginPartial")
             </ul>
         </nav>
     </header>
@@ -60,7 +61,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p>
-                        <i class="fa fa-copyright"></i> Copyright 2020 by Grad School
+                        <i class="fa fa-copyright"></i> Copyright @DateTime.Now.Year by Ryan Palmer
 
                         | Design: <a href="https://templatemo.com" rel="sponsored" target="_parent">TemplateMo</a>
                     </p>
@@ -83,6 +84,18 @@
     <script src="~/assets/js/video.js"></script>
     <script src="~/assets/js/slick-slider.js"></script>
     <script src="~/assets/js/custom.js"></script>
+    <script>
+        $(function () {
+            $('.main-menu li').each(
+                function () {
+                    if ($(this).find('a').attr('href') == window.location.pathname) {
+                        $(this).addClass('active');
+                    }
+                }
+            )
+        });
+    </script>
+    
     @*<script>
             //according to loftblog tut
             $('.nav li:first').addClass('active');

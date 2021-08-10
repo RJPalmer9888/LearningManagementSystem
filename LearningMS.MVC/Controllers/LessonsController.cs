@@ -12,57 +12,59 @@ using LearningMS.MVC.Utilities;
 
 namespace LearningMS.MVC.Controllers
 {
-    public class CoursesController : Controller
+    public class LessonsController : Controller
     {
         private LearningMSEntities db = new LearningMSEntities();
 
-        // GET: Courses
+        // GET: Lessons
         public ActionResult Index()
         {
-            return View(db.Courses.ToList());
+            var lessons = db.Lessons.Include(l => l.Cours);
+            return View(lessons.ToList());
         }
 
-        // GET: Courses/Details/5
+        // GET: Lessons/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            Lesson lesson = db.Lessons.Find(id);
+            if (lesson == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(lesson);
         }
 
-        // GET: Courses/Create
+        // GET: Lessons/Create
         public ActionResult Create()
         {
+            ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName");
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: Lessons/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseId,CourseName,CourseDescription,CoursePhoto,IsActive")] Course course, HttpPostedFileBase coursePhoto)
+        public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase lessonPhoto)
         {
             if (ModelState.IsValid)
             {
                 #region File Upload
                 string file = "NoImage.png";
 
-                if (coursePhoto != null)
+                if (lessonPhoto != null)
                 {
-                    file = coursePhoto.FileName;
+                    file = lessonPhoto.FileName;
                     string ext = file.Substring(file.LastIndexOf('.'));
                     string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
 
                     //Check that the uploaded file is in our list of acceptable exts and file size <= 4mb max from ASP.NET
-                    if (goodExts.Contains(ext.ToLower()) && coursePhoto.ContentLength <= 4194303)
+                    if (goodExts.Contains(ext.ToLower()) && lessonPhoto.ContentLength <= 4194303)
                     {
                         //Create a new file name (using a GUID)
                         file = Guid.NewGuid() + ext;
@@ -70,7 +72,7 @@ namespace LearningMS.MVC.Controllers
                         #region Resize Image
                         string savePath = Server.MapPath("~/imgstore/courses/");
 
-                        Image convertedImage = Image.FromStream(coursePhoto.InputStream);
+                        Image convertedImage = Image.FromStream(lessonPhoto.InputStream);
 
                         int maxImageSize = 500;
 
@@ -83,63 +85,65 @@ namespace LearningMS.MVC.Controllers
                     //no matter what, update the PhotoUrl witht he value of the file variable
 
                 }
-                course.CoursePhoto = file;
+                lesson.LessonPhoto = file;
                 #endregion
-                db.Courses.Add(course);
+                db.Lessons.Add(lesson);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(course);
+            ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName", lesson.CourseId);
+            return View(lesson);
         }
 
-        // GET: Courses/Edit/5
+        // GET: Lessons/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            Lesson lesson = db.Lessons.Find(id);
+            if (lesson == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName", lesson.CourseId);
+            return View(lesson);
         }
 
-        // POST: Courses/Edit/5
+        // POST: Lessons/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CourseId,CourseName,CourseDescription,CoursePhoto,IsActive")] Course course, HttpPostedFileBase newCoursePhoto)
+        public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase newLessonPhoto)
         {
             if (ModelState.IsValid)
             {
                 #region File Upload
                 string file = "NoImage.png";
-                if (course.CoursePhoto != "NoImage.png" && course.CoursePhoto != null)
+                if (lesson.LessonPhoto != "NoImage.png" && lesson.LessonPhoto != null)
                 {
-                    file = course.CoursePhoto;
+                    file = lesson.LessonPhoto;
                 }
 
-                if (newCoursePhoto != null)
+                if (newLessonPhoto != null)
                 {
-                    file = newCoursePhoto.FileName;
+                    file = newLessonPhoto.FileName;
                     string ext = file.Substring(file.LastIndexOf('.'));
                     string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
 
                     //Check that the uploaded file is in our list of acceptable exts and file size <= 4mb max from ASP.NET
-                    if (goodExts.Contains(ext.ToLower()) && newCoursePhoto.ContentLength <= 4194303)
+                    if (goodExts.Contains(ext.ToLower()) && newLessonPhoto.ContentLength <= 4194303)
                     {
                         //Create a new file name (using a GUID)
                         file = Guid.NewGuid() + ext;
 
                         #region Resize Image
-                        string savePath = Server.MapPath("~/imgstore/courses/");
+                        string savePath = Server.MapPath("~/imgstore/lessons/");
 
-                        Image convertedImage = Image.FromStream(newCoursePhoto.InputStream);
+                        Image convertedImage = Image.FromStream(newLessonPhoto.InputStream);
 
                         int maxImageSize = 500;
 
@@ -152,37 +156,38 @@ namespace LearningMS.MVC.Controllers
                     //no matter what, update the PhotoUrl witht he value of the file variable
 
                 }
-                course.CoursePhoto = file;
+                lesson.LessonPhoto = file;
                 #endregion
-                db.Entry(course).State = EntityState.Modified;
+                db.Entry(lesson).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(course);
+            ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName", lesson.CourseId);
+            return View(lesson);
         }
 
-        // GET: Courses/Delete/5
+        // GET: Lessons/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            Lesson lesson = db.Lessons.Find(id);
+            if (lesson == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(lesson);
         }
 
-        // POST: Courses/Delete/5
+        // POST: Lessons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Courses.Find(id);
-            db.Courses.Remove(course);
+            Lesson lesson = db.Lessons.Find(id);
+            db.Lessons.Remove(lesson);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

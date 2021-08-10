@@ -65,6 +65,20 @@ namespace LearningMS.MVC.Models
     public class RegisterViewModel
     {
         [Required]
+        [StringLength(50, ErrorMessage = "*Value must be 50 characters or less")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "*Value must be 50 characters or less")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [StringLength(200, ErrorMessage = "*Value must be 200 characters or less")]
+        [Display(Name = "Photo (Not Required)")]
+        public string Photo { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
