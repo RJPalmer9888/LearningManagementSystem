@@ -50,7 +50,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PdfFilename, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PdfFilename, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.EditorFor(model => model.PdfFilename, new { htmlAttributes = new { @class = "form-control" } })*@
+                <input type="file" name="lessonPDF" />
                 @Html.ValidationMessageFor(model => model.PdfFilename, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -59,7 +60,7 @@
             @Html.LabelFor(model => model.LessonPhoto, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.LessonPhoto, new { htmlAttributes = new { @class = "form-control" } })*@
-                <input type="file" name="newLessonPhoto" />
+                <input type="file" name="lessonPhoto" />
                 @*@Html.ValidationMessageFor(model => model.LessonPhoto, "", new { @class = "text-danger" })*@
             </div>
         </div>

@@ -50,7 +50,7 @@ namespace LearningMS.MVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase lessonPhoto)
+        public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase lessonPhoto, HttpPostedFileBase lessonPdf)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +70,7 @@ namespace LearningMS.MVC.Controllers
                         file = Guid.NewGuid() + ext;
 
                         #region Resize Image
-                        string savePath = Server.MapPath("~/imgstore/courses/");
+                        string savePath = Server.MapPath("~/imgstore/lessons/");
 
                         Image convertedImage = Image.FromStream(lessonPhoto.InputStream);
 
@@ -87,6 +87,36 @@ namespace LearningMS.MVC.Controllers
                 }
                 lesson.LessonPhoto = file;
                 #endregion
+                #region File Upload
+                string pdffile = null;
+
+                if (lessonPdf != null)
+                {
+                    pdffile = lessonPdf.FileName;
+                    string ext = pdffile.Substring(pdffile.LastIndexOf('.'));
+                    string[] goodExts = { ".pdf" };
+
+                    //Check that the uploaded file is in our list of acceptable exts and file size <= 4mb max from ASP.NET
+                    if (goodExts.Contains(ext.ToLower()) && lessonPdf.ContentLength <= 4194303)
+                    {
+                        //Create a new file name (using a GUID)
+                        pdffile = Guid.NewGuid() + ext;
+
+                        string savePath = Server.MapPath("~/pdfstore/lessons/");
+                        lessonPdf.SaveAs(savePath + pdffile);
+
+                    }
+
+                    //no matter what, update the PhotoUrl witht he value of the file variable
+
+                }
+                lesson.PdfFilename = pdffile;
+                #endregion
+                if (lesson.VideoURL != null)
+                {
+                    if (lesson.VideoURL.Contains("/watch")) { lesson.VideoURL = lesson.VideoURL.Replace("/watch?v=", "/embed/"); }
+                }
+
                 db.Lessons.Add(lesson);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -117,7 +147,7 @@ namespace LearningMS.MVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase newLessonPhoto)
+        public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase newLessonPhoto, HttpPostedFileBase lessonPdf)
         {
             if (ModelState.IsValid)
             {
@@ -158,6 +188,42 @@ namespace LearningMS.MVC.Controllers
                 }
                 lesson.LessonPhoto = file;
                 #endregion
+
+                #region File Upload
+                string pdffile = null;
+                if (lesson.PdfFilename != null)
+                {
+                    pdffile = lesson.PdfFilename;
+
+                }
+
+                if (lessonPdf != null)
+                {
+                    pdffile = lessonPdf.FileName;
+                    string ext = pdffile.Substring(pdffile.LastIndexOf('.'));
+                    string[] goodExts = { ".pdf" };
+
+                    //Check that the uploaded file is in our list of acceptable exts and file size <= 4mb max from ASP.NET
+                    if (goodExts.Contains(ext.ToLower()) && lessonPdf.ContentLength <= 4194303)
+                    {
+                        //Create a new file name (using a GUID)
+                        pdffile = Guid.NewGuid() + ext;
+
+                        string savePath = Server.MapPath("~/pdfstore/lessons/");
+                        lessonPdf.SaveAs(savePath + pdffile);
+
+                    }
+
+                    //no matter what, update the PhotoUrl witht he value of the file variable
+
+                }
+                lesson.PdfFilename = pdffile;
+                #endregion
+
+                if (lesson.VideoURL != null)
+                {
+                    if (lesson.VideoURL.Contains("/watch")) { lesson.VideoURL = lesson.VideoURL.Replace("/watch?v=", "/embed/"); }
+                }
                 db.Entry(lesson).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

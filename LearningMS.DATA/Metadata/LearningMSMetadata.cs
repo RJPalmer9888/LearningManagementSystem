@@ -34,7 +34,9 @@ namespace LearningMS.DATA/*.Metadata*/
     }
 
     [MetadataType(typeof(CourseMetadata))]
-    public partial class Course { }
+    public partial class Course {
+        public bool Completion { get; set; }
+    }
     #endregion
 
     #region Course Completion Metadata
@@ -97,7 +99,9 @@ namespace LearningMS.DATA/*.Metadata*/
     }
 
     [MetadataType(typeof(LessonMetadata))]
-    public partial class Lesson { }
+    public partial class Lesson {
+        public bool Completion { get; set; }
+    }
     #endregion
 
     #region Lesson View Metadata

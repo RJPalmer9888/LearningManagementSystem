@@ -1,74 +1,66 @@
 ﻿@model LearningMS.DATA.Lesson
 
-@{
-    ViewBag.Title = "Details";
-}
 
-<h2>Details</h2>
 
-<div>
-    <h4>Lesson</h4>
+<div class="container">
+    <h1>@Html.DisplayFor(model => model.LessonTitle)</h1>
+    <h4>@Html.DisplayFor(model => model.Cours.CourseName)</h4>
+    <p>@Html.DisplayFor(model => model.Introduction)</p>
+
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.LessonTitle)
-        </dt>
+    <br />
 
-        <dd>
-            @Html.DisplayFor(model => model.LessonTitle)
-        </dd>
+    @if (Model.VideoURL != null)
+    {
+        if (Model.PdfFilename != null)
+        {
+            <div class="row">
+                <div class="col-md-6" style="border-right: 1px solid black">
+                    <h6>Lesson Video</h6>
+                    <iframe class="lessonVideo" id="ytplayer" type="text/html" width="100%" height="360" src="@Model.VideoURL" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="col-md-6">
+                    <h6>Lesson PDF</h6>
+                    <object data="~/pdfstore/lessons/@Model.PdfFilename" type="application/pdf" width="100%" height="500">
+                        alt : <a href="~/pdfstore/lessons/@Model.PdfFilename">Pdf File</a>
+                    </object>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6>Lesson Video</h6>
+                    <iframe id="ytplayer" type="text/html" width="640" height="360" src="@Model.VideoURL" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Introduction)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Introduction)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.VideoURL)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.VideoURL)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PdfFilename)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PdfFilename)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LessonPhoto)
-        </dt>
-
-        <dd>
-            <img src="~/imgstore/lessons/@Model.LessonPhoto" alt="@Model.LessonTitle" title="@Model.LessonTitle" width="30%" />
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Cours.CourseName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Cours.CourseName)
-        </dd>
-
-    </dl>
+    }
+    else if (Model.PdfFilename != null)
+    {
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h6>Lesson PDF</h6>
+                <object data="~/pdfstore/lessons/@Model.PdfFilename" type="application/pdf" width="100%" height="1000">
+                    alt : <a href="~/pdfstore/lessons/@Model.PdfFilename">Pdf File</a>
+                </object>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h5>No content to show</h5>
+            </div>
+        </div>
+    }
+    <hr />
+    <br />
+    <h6>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.LessonId }) |
+        @Html.ActionLink("Back to Course", "Details", "Courses", new { id = Model.CourseId }, null)
+    </h6>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.LessonId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

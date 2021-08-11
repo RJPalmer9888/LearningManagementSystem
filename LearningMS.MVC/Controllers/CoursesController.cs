@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using LearningMS.DATA;
 using LearningMS.MVC.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace LearningMS.MVC.Controllers
 {
@@ -34,7 +35,37 @@ namespace LearningMS.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            return View(course);
+            course.Completion = false;
+            int currentYear = DateTime.Now.Year;
+            var userId = User.Identity.GetUserId();
+            var lessons = db.Lessons.Where(lv => lv.CourseId == id).OrderBy(s => s.LessonId);
+            var lessonViews = db.LessonViews.Where(lv => lv.UserId == userId);
+            var courseCompletions = db.CourseCompletions.Where(cc => cc.UserId == userId && cc.DateCompleted.Year == currentYear);
+            var courses = db.Courses.Where(lv => lv.CourseId == id);
+            
+            
+                foreach (var courseCompletion in courseCompletions)
+                {
+                    if (courseCompletion.CourseId == id)
+                    {
+                        course.Completion = true;
+                    }
+                }
+            
+            foreach (var lesson in lessons)
+            {
+                foreach (var lessonView in lessonViews)
+                {
+                    if (lesson.LessonId == lessonView.LessonId)
+                    {
+                        lesson.Completion = true;
+                    }
+                }
+            }
+            ViewBag.Title = course.CourseName;
+            ViewBag.Description = course.CourseDescription;
+            ViewBag.Completed = course.Completion;
+            return View(lessons.ToList());
         }
 
         // GET: Courses/Create

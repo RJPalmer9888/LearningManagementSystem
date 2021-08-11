@@ -1,50 +1,60 @@
-﻿@model LearningMS.DATA.Course
+﻿@model IEnumerable<LearningMS.DATA.Lesson>
 
-@{
-    ViewBag.Title = "Details";
-}
 
-<h2>Details</h2>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>@ViewBag.Title</h1>
+            <p>@ViewBag.Description</p>
+        </div>
 
-<div>
-    <h4>Course</h4>
+        <div class="col-md-6" style="text-align:right">
+            @if (ViewBag.Completion == true)
+            {
+                <h5 style="color: green">Completed</h5>
+            }
+            else
+            {
+                <h5 style="color: red">Not Completed</h5>
+            }
+        </div>
+    </div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseName)
-        </dt>
+    <br />
+    <div>
+        <section id="weaponGrid">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-4 student">
+                        <a href="@Url.Action("Details", "Lessons", new {id = item.LessonId})" class="course-img">
+                            <div class="product-item">
 
-        <dd>
-            @Html.DisplayFor(model => model.CourseName)
-        </dd>
+                                <div class="buffer"><img src="~/imgstore/lessons/@item.LessonPhoto" alt="@item.LessonTitle" width="100%" /></div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseDescription)
-        </dt>
+                                <div class="down-content">
+                                    <h4>@item.LessonTitle</h4>
+                                    <p>@item.Introduction</p>
+                                    @if (item.Completion == true)
+                                    {
+                                        <span style="color: green">Completed</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: red">Not Completed</span>
+                                    }
 
-        <dd>
-            @Html.DisplayFor(model => model.CourseDescription)
-        </dd>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+    <p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CoursePhoto)
-        </dt>
-
-        <dd>
-            <img src="~/imgstore/courses/@Model.CoursePhoto" alt="@Model.CourseName" title="@Model.CourseName" width="30%" />
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-
-    </dl>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
