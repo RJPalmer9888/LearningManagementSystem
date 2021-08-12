@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="~/assets/css/templatemo-grad-school.css">
     <link rel="stylesheet" href="~/assets/css/owl.css">
     <link rel="stylesheet" href="~/assets/css/lightbox.css">
+    <link rel="stylesheet" href="~/vendor/jquery/jQuery-plugin-progressbar.css"  />
     <!--
 
     TemplateMo 557 Grad School
@@ -34,18 +35,17 @@
     <!--header-->
     <header class="main-header clearfix" role="header">
         <div class="logo">
-            <a href="#"><em>Vanguard</em>chives</a>
+            <a href="@Url.Action("Index","Home")"><em>Vanguard</em>chives</a>
         </div>
         <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
         <nav id="menu" class="main-nav" role="navigation">
             <ul class="main-menu">
                 <li><a href="@Url.Action("Index","Home")">Home</a></li>
-                <li>
-                    <a href="@Url.Action("About","Home")">About Us</a>
-
-                </li>
+                <li><a href="@Url.Action("About","Home")">About Us</a></li>
                 <li><a href="@Url.Action("Index","Courses")">Courses</a></li>
                 <li><a href="@Url.Action("Index","Lessons")">Lessons</a></li>
+                <li><a href="@Url.Action("Index","LessonViews")">Completed Lessons</a></li>
+                <li><a href="@Url.Action("Index","CourseCompletions")">Completed Courses</a></li>
                 <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
                 @Html.Partial("_LoginPartial")
             </ul>
@@ -69,12 +69,12 @@
             </div>
         </div>
     </footer>
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")*@
     <!-- Scripts -->
 
     @RenderSection("scripts", false)
     <!-- Bootstrap core JavaScript -->
-    <script src="~/vendor/jquery/jquery.min.js"></script>
+    @*<script src="~/vendor/jquery/jquery.min.js"></script>*@
     <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <script src="~/assets/js/isotope.min.js"></script>
@@ -84,6 +84,10 @@
     <script src="~/assets/js/video.js"></script>
     <script src="~/assets/js/slick-slider.js"></script>
     <script src="~/assets/js/custom.js"></script>
+
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="~/vendor/jquery/jQuery-plugin-progressbar.js"></script>
+
     <script>
         $(function () {
             $('.main-menu li').each(
@@ -95,7 +99,10 @@
             )
         });
     </script>
-    
+    <script>
+        $(".progress-bar").loading();
+
+    </script>
     @*<script>
             //according to loftblog tut
             $('.nav li:first').addClass('active');

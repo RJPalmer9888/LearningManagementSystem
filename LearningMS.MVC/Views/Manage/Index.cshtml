@@ -11,7 +11,7 @@
             <div class="col-md-6">
                 <p class="text-success">@ViewBag.StatusMessage</p>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8 " style="border-right: 1px solid black">
                         
                         <img src="~/imgstore/users/@Model.Photo" alt="@Model.Email" title="@Model.Email" width="100%"/>
                         <h2>@Model.FirstName @Model.LastName</h2>
@@ -26,8 +26,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <img src="~/Images/bigol.jpg" width="60%"/>
+            <div class="col-md-6" style="vertical-align:central">
+                Courses Completed for @DateTime.Now.Year
+                <div class="progress-bar" data-percent="@((ViewBag.Done/5)*100)" data-duration="1000" data-color="#ccc,yellow">
+
+                </div>
+                <h5>@ViewBag.Done/6</h5>
+                <br />
+                <br />
+                <button class="btn btn-primary"><a href="@Url.Action("Index","Courses")"> Go To Courses</a></button>
+                
             </div>
         </div>
     </div>

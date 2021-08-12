@@ -72,6 +72,17 @@ namespace LearningMS.MVC.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+            var completions = deets.CourseCompletions.Where(cc => cc.UserId == userId).ToList();
+            var done = 0m;
+            if (completions.Count() > 6)
+            {
+                done = 6m;
+            }
+            else
+            {
+                done = completions.Count();
+            }
+            ViewBag.Done = done;
             return View(model);
         }
 
