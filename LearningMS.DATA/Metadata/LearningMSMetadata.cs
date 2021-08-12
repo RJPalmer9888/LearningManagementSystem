@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,8 +35,43 @@ namespace LearningMS.DATA/*.Metadata*/
     }
 
     [MetadataType(typeof(CourseMetadata))]
-    public partial class Course {
+    public partial class Course
+    {
         public bool Completion { get; set; }
+
+        public void checkCompletion(int course, string user, LearningMSEntities db)
+        {
+            //Lessons where courseid == courseID;
+            var lessons = db.Lessons.Where(l => l.CourseId == course);
+            //lessonviews where courseid == courseId && userid == userid
+            var lessionViews = db.LessonViews.Where(lv => lv.Lesson.CourseId == course && lv.UserId == user && lv.DateViewed.Year == DateTime.Now.Year);
+            var courseCompletions = db.CourseCompletions.Where(lv => lv.UserId == user && lv.CourseId == course).FirstOrDefault();
+            if (lessons.Count() == lessionViews.Count())
+            {
+                Completion = true;
+                if (courseCompletions == null)
+                {
+                    CourseCompletion newCC = new CourseCompletion();
+                    newCC.DateCompleted = DateTime.Now;
+                    newCC.CourseId = course;
+                    newCC.UserId = user;
+                    db.CourseCompletions.Add(newCC);
+                }
+                else
+                {
+                    CourseCompletion courseCompletion = courseCompletions;
+                    courseCompletion.DateCompleted = DateTime.Now;
+                    db.Entry(courseCompletion).State = EntityState.Modified;
+
+                }
+                db.SaveChanges();
+            }
+            else
+            {
+                Completion = false;
+            }
+            return;
+        }
     }
     #endregion
 
@@ -58,7 +94,11 @@ namespace LearningMS.DATA/*.Metadata*/
     }
 
     [MetadataType(typeof(CourseCompletionMetadata))]
-    public partial class CourseCompletion { }
+    public partial class CourseCompletion
+    {
+
+
+    }
     #endregion
 
     #region Lesson Metadata
@@ -99,8 +139,11 @@ namespace LearningMS.DATA/*.Metadata*/
     }
 
     [MetadataType(typeof(LessonMetadata))]
-    public partial class Lesson {
+    public partial class Lesson
+    {
         public bool Completion { get; set; }
+
+
     }
     #endregion
 
@@ -124,5 +167,6 @@ namespace LearningMS.DATA/*.Metadata*/
     [MetadataType(typeof(LessonViewMetadata))]
     public partial class LessonView { }
     #endregion
+
 
 }

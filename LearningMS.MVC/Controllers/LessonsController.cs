@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using LearningMS.DATA;
 using LearningMS.MVC.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace LearningMS.MVC.Controllers
 {
@@ -35,6 +36,25 @@ namespace LearningMS.MVC.Controllers
             {
                 return HttpNotFound();
             }
+            var userId = User.Identity.GetUserId();
+            var lessonViews = db.LessonViews.Where(lv => lv.UserId == userId && lv.LessonId == id).FirstOrDefault();
+            //var lessonViewsL = db.LessonViews.Where(lv => lv.UserId == userId && lv.LessonId == id).ToList();
+            if (lessonViews == null)
+            {
+                LessonView newLV = new LessonView();
+                newLV.DateViewed = DateTime.Now;
+                newLV.LessonId = (int)id;
+                newLV.UserId = userId;
+                db.LessonViews.Add(newLV);
+            }
+            else
+            {
+                LessonView lessonView = lessonViews;
+                lessonView.DateViewed= DateTime.Now;
+                db.Entry(lessonView).State = EntityState.Modified;
+                
+            }
+            db.SaveChanges();
             return View(lesson);
         }
 

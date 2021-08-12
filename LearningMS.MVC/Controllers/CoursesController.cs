@@ -20,7 +20,14 @@ namespace LearningMS.MVC.Controllers
         // GET: Courses
         public ActionResult Index()
         {
-            return View(db.Courses.ToList());
+            var courses = db.Courses.ToList();
+            var userId = User.Identity.GetUserId();
+            foreach (var course in courses)
+            {
+                course.checkCompletion(course.CourseId, userId, db);
+            }
+            return View(courses);
+            
         }
 
         // GET: Courses/Details/5
@@ -35,22 +42,14 @@ namespace LearningMS.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            course.Completion = false;
+            
             int currentYear = DateTime.Now.Year;
             var userId = User.Identity.GetUserId();
             var lessons = db.Lessons.Where(lv => lv.CourseId == id).OrderBy(s => s.LessonId);
             var lessonViews = db.LessonViews.Where(lv => lv.UserId == userId);
             var courseCompletions = db.CourseCompletions.Where(cc => cc.UserId == userId && cc.DateCompleted.Year == currentYear);
             var courses = db.Courses.Where(lv => lv.CourseId == id);
-            
-            
-                foreach (var courseCompletion in courseCompletions)
-                {
-                    if (courseCompletion.CourseId == id)
-                    {
-                        course.Completion = true;
-                    }
-                }
+            course.checkCompletion((int)id, userId, db);
             
             foreach (var lesson in lessons)
             {
@@ -64,7 +63,8 @@ namespace LearningMS.MVC.Controllers
             }
             ViewBag.Title = course.CourseName;
             ViewBag.Description = course.CourseDescription;
-            ViewBag.Completed = course.Completion;
+            var completed = course.Completion;
+            ViewBag.Completed = completed;
             return View(lessons.ToList());
         }
 
