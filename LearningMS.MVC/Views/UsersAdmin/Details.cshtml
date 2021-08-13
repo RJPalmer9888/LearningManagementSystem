@@ -1,45 +1,47 @@
-﻿@model LearningMS.MVC.Models.ApplicationUser
-
+﻿@model LearningMS.MVC.Models.IndexViewModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Profile";
 }
 
-<h2>Details.</h2>
+<div class="container">
+    <h1>@ViewBag.Title</h1>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <p class="text-success">@ViewBag.StatusMessage</p>
+            <div class="row">
+                <div class="col-md-8 " style="border-right: 1px solid black">
 
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-    </dl>
+                    <img src="~/imgstore/users/@Model.Photo" alt="@Model.Email" title="@Model.Email" width="100%" />
+                    <h2>@Model.FirstName @Model.LastName</h2>
+                    <h5>@Model.Email</h5>
+
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId })
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" style="vertical-align:central">
+            Courses Completed for @DateTime.Now.Year
+            @if (ViewBag.Done == 0)
+            {
+                <div class="progress-bar" data-percent="1" data-duration="1000" data-color="#ccc,yellow"></div>
+            }
+            else
+            {
+                <div class="progress-bar" data-percent="@((ViewBag.Done/5)*100)" data-duration="1000" data-color="#ccc,yellow">
+
+                </div>
+            }
+
+            <h5>@ViewBag.Done/5</h5>
+            <br />
+            <br />
+            @*<button class="btn btn-primary"><a href="@Url.Action("Index","Courses")"> Go To Courses</a></button>*@
+
+        </div>
+    </div>
+    <button class="btn btn-primary"><a href="@Url.Action("Index", "UsersAdmin")">Back to Users</a></button>
 </div>
-<h4>List of roles for this user</h4>
-@if (ViewBag.RoleNames.Count == 0)
-{
-    <hr />
-    <p>No roles found for this user.</p>
-}
-
-<table class="table">
-
-    @foreach (var item in ViewBag.RoleNames)
-    {
-        <tr>
-            <td>
-                @item
-            </td>
-        </tr>
-    }
-</table>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-
-

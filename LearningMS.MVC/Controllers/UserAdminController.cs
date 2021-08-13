@@ -1,4 +1,5 @@
-﻿using LearningMS.MVC.Models;
+﻿using LearningMS.DATA;
+using LearningMS.MVC.Models;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Web.Mvc;
 
 namespace LearningMS.MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "HR Admin")]
     public class UsersAdminController : Controller
     {
         public UsersAdminController()
@@ -51,7 +52,7 @@ namespace LearningMS.MVC.Controllers
         //
         // GET: /Users/
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(UserProgressModel upm)
         {
             return View(await UserManager.Users.ToListAsync());
         }
@@ -68,8 +69,28 @@ namespace LearningMS.MVC.Controllers
             var user = await UserManager.FindByIdAsync(id);
 
             ViewBag.RoleNames = await UserManager.GetRolesAsync(user.Id);
-
-            return View(user);
+            LearningMSEntities deets = new LearningMSEntities();
+            var userInfo = deets.UserDetails.Where(lv => lv.UserId == id).FirstOrDefault();
+            var model = new IndexViewModel
+            {
+                UserId = id,
+                FirstName = userInfo.FirstName,
+                LastName = userInfo.LastName,
+                Photo = userInfo.Photo,
+                Email = user.Email
+            };
+            var completions = deets.CourseCompletions.Where(cc => cc.UserId == id).ToList();
+            var done = 0m;
+            if (completions.Count() > 5)
+            {
+                done = 5m;
+            }
+            else
+            {
+                done = completions.Count();
+            }
+            ViewBag.Done = done;
+            return View(model);
         }
 
         //

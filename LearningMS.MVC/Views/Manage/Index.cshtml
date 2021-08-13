@@ -26,12 +26,22 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-6" style="vertical-align:central">
                 Courses Completed for @DateTime.Now.Year
-                <div class="progress-bar" data-percent="@((ViewBag.Done/5)*100)" data-duration="1000" data-color="#ccc,yellow">
+                @if (ViewBag.Done == 0)
+                {
+                    <div class="progress-bar" data-percent="1" data-duration="1000" data-color="#ccc,yellow"></div>
+                }
+                else
+                {
+                    <div class="progress-bar" data-percent="@((ViewBag.Done/5)*100)" data-duration="1000" data-color="#ccc,yellow">
 
-                </div>
-                <h5>@ViewBag.Done/6</h5>
+                    </div>
+                }
+
+            </div>
+                <h5>@ViewBag.Done/5</h5>
                 <br />
                 <br />
                 <button class="btn btn-primary"><a href="@Url.Action("Index","Courses")"> Go To Courses</a></button>

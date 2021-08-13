@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LearningMS.DATA/*.Metadata*/
 {
+    public partial class UserDetail
+    {
+        public int Progress { get; set; }
+
+    }
+
     #region Course Metadata
     public class CourseMetadata
     {
@@ -46,6 +55,15 @@ namespace LearningMS.DATA/*.Metadata*/
             //lessonviews where courseid == courseId && userid == userid
             var lessionViews = db.LessonViews.Where(lv => lv.Lesson.CourseId == course && lv.UserId == user && lv.DateViewed.Year == DateTime.Now.Year);
             var courseCompletions = db.CourseCompletions.Where(lv => lv.UserId == user && lv.CourseId == course).FirstOrDefault();
+            var userDetails = db.UserDetails.Where(ud => ud.UserId == user).FirstOrDefault();
+            var completions = db.CourseCompletions.Where(cc => cc.UserId == user).ToList();
+            var completedCourse = db.Courses.Where(cc => cc.CourseId == course).FirstOrDefault();
+            var finished = completions.Count();
+            if (finished > 5)
+            {
+                finished = 5;
+            }
+            userDetails.Progress = finished;
             if (lessons.Count() == lessionViews.Count())
             {
                 Completion = true;
@@ -56,6 +74,72 @@ namespace LearningMS.DATA/*.Metadata*/
                     newCC.CourseId = course;
                     newCC.UserId = user;
                     db.CourseCompletions.Add(newCC);
+                    #region Email Manager
+                    string name = userDetails.FirstName + " " + userDetails.LastName;
+                    string finishedCourse = completedCourse.CourseName;
+                    userDetails.Progress += 1;
+                    int progress = userDetails.Progress;
+                    string returnMessage = $"{name} has completed the {finishedCourse} course. They now have completed {progress} {(progress == 1 ? "course" : "courses")} this year.";
+                    string subject = name + ": Course Completion";
+                    
+                    Boolean isMailSetUp = true;
+
+                    if (isMailSetUp)
+                    {
+                        //Add using statements for the System Mail
+                        //Mailmessage Package is what sends the email (System.Net.Mail)
+                        MailMessage mm = new MailMessage(
+                             // From
+                             ConfigurationManager.AppSettings["EmailUser"].ToString(),
+
+                            ConfigurationManager.AppSettings["EmailTo"].ToString(),
+                            subject, 
+                            returnMessage
+                            )
+                        {
+
+                            //Mailmessage properties
+                            //Allow HTML formatting
+                            IsBodyHtml = true,
+
+                            //Set Mail priority
+                            Priority = MailPriority.Normal //Default is normal priority
+                        };
+
+                        //Set up the reply list
+                        //mm.ReplyToList.Add(cvm.Email);
+
+                        //  SmtpClient - This is the information from the HOST (smarterAsp.net) 
+                        // that allows the email to actually be sent
+                        SmtpClient client = new SmtpClient(
+                            ConfigurationManager.AppSettings["EmailClient"].ToString());
+
+                        //  Client credentials (smarterASP requires your user name and password)
+                        client.Credentials = new NetworkCredential(
+                            ConfigurationManager.AppSettings["EmailUser"].ToString(),
+                            ConfigurationManager.AppSettings["EmailPassword"].ToString());
+
+                        //  It is possible that the mailserver is down or we may have configuration 
+                        // issues, so we want to encapsulate our code in a try/catch
+                        try
+                        {
+                            //Attempt to send the email
+                            client.Send(mm);
+                        }
+                        catch (Exception ex)
+                        {
+                            //ViewBag.CustomerMessage = $"We're sorry your request could not be " +
+                            //    $"completed at this time." +
+                            //    $"  Please try again later.  Error Message: <br /> {ex.StackTrace}";
+                            //return View(cvm); //  Return the view with the entire message so that 
+                            //                  //  users can copy/paste it for later
+
+
+                        }
+
+                    }
+
+                    #endregion
                 }
                 else
                 {
@@ -70,6 +154,9 @@ namespace LearningMS.DATA/*.Metadata*/
             {
                 Completion = false;
             }
+            var newCompletions = db.CourseCompletions.Where(cc => cc.UserId == user).ToList();
+            
+            
             return;
         }
     }
@@ -167,6 +254,8 @@ namespace LearningMS.DATA/*.Metadata*/
     [MetadataType(typeof(LessonViewMetadata))]
     public partial class LessonView { }
     #endregion
+
+    
 
 
 }

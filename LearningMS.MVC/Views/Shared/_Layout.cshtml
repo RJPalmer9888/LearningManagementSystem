@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="~/assets/css/templatemo-grad-school.css">
     <link rel="stylesheet" href="~/assets/css/owl.css">
     <link rel="stylesheet" href="~/assets/css/lightbox.css">
-    <link rel="stylesheet" href="~/vendor/jquery/jQuery-plugin-progressbar.css"  />
+    <link rel="stylesheet" href="~/vendor/jquery/jQuery-plugin-progressbar.css" />
     <!--
 
     TemplateMo 557 Grad School
@@ -43,10 +43,22 @@
                 <li><a href="@Url.Action("Index","Home")">Home</a></li>
                 <li><a href="@Url.Action("About","Home")">About Us</a></li>
                 <li><a href="@Url.Action("Index","Courses")">Courses</a></li>
-                <li><a href="@Url.Action("Index","Lessons")">Lessons</a></li>
-                <li><a href="@Url.Action("Index","LessonViews")">Completed Lessons</a></li>
-                <li><a href="@Url.Action("Index","CourseCompletions")">Completed Courses</a></li>
                 <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                @if (Request.IsAuthenticated)
+                {
+
+                    if (User.IsInRole("Manager") || User.IsInRole("HR Admin"))
+                    {
+                        <li><a href="@Url.Action("Index", "Lessons")">Lessons</a></li>
+                        <li><a href="@Url.Action("Index", "UsersAdmin")">Users</a></li>
+
+                    }
+                    if (User.IsInRole("HR Admin"))
+                    {
+                        <li><a href="@Url.Action("Index", "LessonViews")">Completed Lessons</a></li>
+                        <li><a href="@Url.Action("Index", "CourseCompletions")">Completed Courses</a></li>
+                    }
+                }
                 @Html.Partial("_LoginPartial")
             </ul>
         </nav>

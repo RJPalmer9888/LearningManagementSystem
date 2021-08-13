@@ -16,6 +16,7 @@ namespace LearningMS.MVC.Models
             // Add custom user claims here
             return userIdentity;
         }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace LearningMS.MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "HR Admin")]
     public class RolesAdminController : Controller
     {
         public RolesAdminController()

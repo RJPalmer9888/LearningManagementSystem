@@ -74,9 +74,9 @@ namespace LearningMS.MVC.Controllers
             };
             var completions = deets.CourseCompletions.Where(cc => cc.UserId == userId).ToList();
             var done = 0m;
-            if (completions.Count() > 6)
+            if (completions.Count() > 5)
             {
-                done = 6m;
+                done = 5m;
             }
             else
             {

@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Index";
+    LearningMS.DATA.LearningMSEntities db = new LearningMS.DATA.LearningMSEntities();
+    
 }
 
 <h2>Index</h2>
@@ -15,6 +17,9 @@
             @Html.DisplayNameFor(model => model.UserName)
         </th>
         <th>
+            <p>Annual Progress</p>
+        </th>
+        <th>
 
         </th>
     </tr>
@@ -24,6 +29,27 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @{var completions = db.CourseCompletions.Where(cc => cc.UserId == item.Id).ToList();
+                    var done = 0m;
+                    if (completions.Count() > 5)
+                    {
+                        done = 5m;
+                    }
+                    else
+                    {
+                        done = completions.Count();
+                    }
+                }
+                @if (done < 5)
+                {
+                <p>@done of 5</p>
+                }
+                else
+                {
+                    <p style="font-weight:bold">Completed</p>
+                }
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
