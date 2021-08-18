@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LearningMS.DATA.Course>
+
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Currently Available Courses</h1>
+            <p>New courses rotate in and out, to ensure you're always learning the most up-to-date information!</p>
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div>
+        <section id="weaponGrid">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-4 student">
+                        <div class="product-item">
+
+                            <div class="buffer"><img src="~/imgstore/courses/@item.CoursePhoto" alt="@item.CourseName" width="100%" /></div>
+
+                            <div class="down-content">
+                                <h4>@item.CourseName</h4>
+                                <p>@item.CourseDescription</p>
+                                <p>@item.Lessons.Count() Lessons</p>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

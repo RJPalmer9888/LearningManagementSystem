@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 
 namespace LearningMS.MVC.Controllers
 {
+    [Authorize]
     public class LessonsController : Controller
     {
         private LearningMSEntities db = new LearningMSEntities();
@@ -59,6 +60,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // GET: Lessons/Create
+        [Authorize(Roles = "Manager, HR Admin")]
         public ActionResult Create()
         {
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName");
@@ -68,6 +70,7 @@ namespace LearningMS.MVC.Controllers
         // POST: Lessons/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager, HR Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase lessonPhoto, HttpPostedFileBase lessonPdf)
@@ -147,6 +150,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // GET: Lessons/Edit/5
+        [Authorize(Roles = "Manager, HR Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -165,6 +169,7 @@ namespace LearningMS.MVC.Controllers
         // POST: Lessons/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager, HR Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,LessonPhoto,IsActive")] Lesson lesson, HttpPostedFileBase newLessonPhoto, HttpPostedFileBase lessonPdf)
@@ -253,6 +258,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // GET: Lessons/Delete/5
+        [Authorize(Roles = "HR Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -268,6 +274,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // POST: Lessons/Delete/5
+        [Authorize(Roles = "HR Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

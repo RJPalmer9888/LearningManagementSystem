@@ -20,17 +20,67 @@ namespace LearningMS.MVC.Controllers
         // GET: Courses
         public ActionResult Index()
         {
-            var courses = db.Courses.ToList();
-            var userId = User.Identity.GetUserId();
-            foreach (var course in courses)
+            if (Session["Grid"] == null)
             {
-                course.checkCompletion(course.CourseId, userId, db);
+                Session["Grid"] = false;
             }
-            return View(courses);
-            
+            bool grid = (bool)Session["Grid"];
+            if (grid == true)
+            {
+                var courses = db.Courses.Where(c => c.IsActive == true).ToList();
+                var userId = User.Identity.GetUserId();
+                foreach (var course in courses)
+                {
+                    course.checkCompletion(course.CourseId, userId, db);
+                }
+                return View("CoursesGrid", courses);
+            }
+            if (Request.IsAuthenticated && (User.IsInRole("Manager") || User.IsInRole("HR Admin")))
+            {
+                Session["grid"] = false;
+                var courses = db.Courses.ToList();
+                var userId = User.Identity.GetUserId();
+                foreach (var course in courses)
+                {
+                    course.checkCompletion(course.CourseId, userId, db);
+                }
+                return View("CoursesAdmin", courses);
+            }
+            else if (Request.IsAuthenticated)
+            {
+                Session["grid"] = false;
+                var courses = db.Courses.Where(c => c.IsActive == true).ToList();
+                var userId = User.Identity.GetUserId();
+                foreach (var course in courses)
+                {
+                    course.checkCompletion(course.CourseId, userId, db);
+                }
+                return View(courses);
+            }
+            else
+            {
+                Session["grid"] = false;
+                var courses = db.Courses.Where(c => c.IsActive == true).ToList();
+                return View("CoursesBasic", courses);
+            }
+        }
+
+        [Authorize]
+        public ActionResult CoursesGrid()
+        {
+            Session["Grid"] = true;
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public ActionResult CoursesList()
+        {
+            Session["Grid"] = false;
+            return RedirectToAction("Index");
         }
 
         // GET: Courses/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -42,7 +92,7 @@ namespace LearningMS.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            
+
             int currentYear = DateTime.Now.Year;
             var userId = User.Identity.GetUserId();
             var lessons = db.Lessons.Where(lv => lv.CourseId == id).OrderBy(s => s.LessonId);
@@ -50,7 +100,7 @@ namespace LearningMS.MVC.Controllers
             var courseCompletions = db.CourseCompletions.Where(cc => cc.UserId == userId && cc.DateCompleted.Year == currentYear);
             var courses = db.Courses.Where(lv => lv.CourseId == id);
             course.checkCompletion((int)id, userId, db);
-            
+
             foreach (var lesson in lessons)
             {
                 foreach (var lessonView in lessonViews)
@@ -69,6 +119,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // GET: Courses/Create
+        [Authorize(Roles = "Manager, HR Admin")]
         public ActionResult Create()
         {
             return View();
@@ -77,6 +128,7 @@ namespace LearningMS.MVC.Controllers
         // POST: Courses/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager, HR Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseId,CourseName,CourseDescription,CoursePhoto,IsActive")] Course course, HttpPostedFileBase coursePhoto)
@@ -125,6 +177,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // GET: Courses/Edit/5
+        [Authorize(Roles = "Manager, HR Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -142,6 +195,7 @@ namespace LearningMS.MVC.Controllers
         // POST: Courses/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager, HR Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseId,CourseName,CourseDescription,CoursePhoto,IsActive")] Course course, HttpPostedFileBase newCoursePhoto)
@@ -193,6 +247,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // GET: Courses/Delete/5
+        [Authorize(Roles = "HR Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -208,6 +263,7 @@ namespace LearningMS.MVC.Controllers
         }
 
         // POST: Courses/Delete/5
+        [Authorize(Roles = "HR Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

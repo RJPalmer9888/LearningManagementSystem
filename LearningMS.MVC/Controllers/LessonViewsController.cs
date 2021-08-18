@@ -10,6 +10,7 @@ using LearningMS.DATA;
 
 namespace LearningMS.MVC.Controllers
 {
+    [Authorize(Roles = "HR Admin")]
     public class LessonViewsController : Controller
     {
         private LearningMSEntities db = new LearningMSEntities();

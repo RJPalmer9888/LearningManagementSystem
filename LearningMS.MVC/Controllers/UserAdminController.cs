@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace LearningMS.MVC.Controllers
 {
-    [Authorize(Roles = "HR Admin")]
+    [Authorize(Roles = "HR Admin,Manager")]
     public class UsersAdminController : Controller
     {
         public UsersAdminController()
@@ -95,6 +95,7 @@ namespace LearningMS.MVC.Controllers
 
         //
         // GET: /Users/Create
+        [Authorize(Roles = "HR Admin")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -105,6 +106,7 @@ namespace LearningMS.MVC.Controllers
 
         //
         // POST: /Users/Create
+        [Authorize(Roles = "HR Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(RegisterViewModel userViewModel, params string[] selectedRoles)
@@ -143,6 +145,7 @@ namespace LearningMS.MVC.Controllers
 
         //
         // GET: /Users/Edit/1
+        [Authorize(Roles = "HR Admin")]
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
@@ -173,6 +176,7 @@ namespace LearningMS.MVC.Controllers
 
         //
         // POST: /Users/Edit/5
+        [Authorize(Roles = "HR Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Email,Id")] EditUserViewModel editUser, params string[] selectedRole)
@@ -214,6 +218,7 @@ namespace LearningMS.MVC.Controllers
 
         //
         // GET: /Users/Delete/5
+        [Authorize(Roles = "HR Admin")]
         [HttpGet]
         public async Task<ActionResult> Delete(string id)
         {
@@ -231,6 +236,7 @@ namespace LearningMS.MVC.Controllers
 
         //
         // POST: /Users/Delete/5
+        [Authorize(Roles = "Manager, HR Admin")]
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]

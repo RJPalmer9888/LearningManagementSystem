@@ -12,6 +12,7 @@ namespace LearningMS.MVC.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+
             return View();
         }
 

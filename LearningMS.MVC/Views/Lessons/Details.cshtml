@@ -2,11 +2,31 @@
 
 
 
-<div class="container">
-    <h1>@Html.DisplayFor(model => model.LessonTitle)</h1>
-    <h4>@Html.DisplayFor(model => model.Cours.CourseName)</h4>
-    <p>@Html.DisplayFor(model => model.Introduction)</p>
 
+<div class="container">
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <h1>@Html.DisplayFor(model => model.LessonTitle)</h1>
+            <h4>@Html.DisplayFor(model => model.Cours.CourseName)</h4>
+            <p>@Html.DisplayFor(model => model.Introduction)</p>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-2">
+            <br />
+            <br />
+            <button class="btn btn-primary">
+                @Html.ActionLink("Back to Course", "Details", "Courses", new { id = Model.CourseId }, null)
+            </button>
+            @if (Request.IsAuthenticated && (User.IsInRole("Manager") || User.IsInRole("HR Admin")))
+            {
+                <br /><br />
+                <h6 style="text-align: right">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.LessonId })
+                </h6>
+            }
+        </div>
+    </div>
     <hr />
     <br />
 
@@ -59,8 +79,6 @@
     }
     <hr />
     <br />
-    <h6>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.LessonId }) |
-        @Html.ActionLink("Back to Course", "Details", "Courses", new { id = Model.CourseId }, null)
-    </h6>
+
+
 </div>

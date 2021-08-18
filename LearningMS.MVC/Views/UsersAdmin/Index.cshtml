@@ -3,14 +3,17 @@
 @{
     ViewBag.Title = "Index";
     LearningMS.DATA.LearningMSEntities db = new LearningMS.DATA.LearningMSEntities();
-    
+
 }
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (Request.IsAuthenticated && User.IsInRole("HR Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
 <table class="table">
     <tr>
         <th>
@@ -44,7 +47,7 @@
                 }
                 @if (done < 5)
                 {
-                <p>@done of 5</p>
+                    <p>@done of 5</p>
                 }
                 else
                 {
@@ -52,9 +55,16 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @if (Request.IsAuthenticated && User.IsInRole("HR Admin"))
+                {
+                    <span>@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |</span>
+                }
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                @if (Request.IsAuthenticated && User.IsInRole("HR Admin"))
+                {
+                    <span>| @Html.ActionLink("Delete", "Delete", new { id = item.Id })</span>
+                }
+
             </td>
         </tr>
     }

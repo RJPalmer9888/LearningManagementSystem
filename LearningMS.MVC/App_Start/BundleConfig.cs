@@ -23,8 +23,24 @@ namespace LearningMS.MVC
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/vendor/bootstrap/css/bootstrap.min.css",
+                      //"~/Content/site.css",
+                      "~/assets/css/fontawesome.css",
+                      "~/assets/css/templatemo-grad-school.css",
+                      "~/assets/css/owl.css",
+                      "~/assets/css/lightbox.css",
+                      "~/vendor/jquery/jQuery-plugin-progressbar.css"
+                      ));
+
+            bundles.Add(new ScriptBundle("~/bundles/javascript").Include(
+                "~/assets/js/isotope.min.js",
+                "~/assets/js/owl-carousel.js",
+                "~/assets/js/lightbox.js",
+                "~/assets/js/tabs.js",
+                "~/assets/js/video.js",
+                "~/assets/js/slick-slider.js",
+                "~/assets/js/custom.js"));
+
         }
     }
 }

@@ -234,6 +234,7 @@
     <Content Include="assets\js\slick-slider.js" />
     <Content Include="assets\js\tabs.js" />
     <Content Include="assets\js\video.js" />
+    <Content Include="backgroundVideo111.mp4" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -424,6 +425,9 @@
     <Content Include="Views\LessonViews\Index.cshtml" />
     <Content Include="_Archive\progressbar\jQuery-plugin-progressbar.scss" />
     <Content Include="Views\UsersAdmin\Details - Copy.cshtml" />
+    <Content Include="Views\Courses\CoursesAdmin.cshtml" />
+    <Content Include="Views\Courses\CoursesBasic.cshtml" />
+    <Content Include="Views\Courses\CoursesGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

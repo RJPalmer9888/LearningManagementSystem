@@ -4,48 +4,72 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="container">
+    <h2>Courses</h2>
+    <button class="btn btn-primary">
+        <a href="@Url.Action("CoursesGrid","Courses")">
+            Grid View
+        </a>
+    </button>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseDescription)
+            </th>
+            <th>
+                Lessons
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoursePhoto)
+            </th>
+            <th>Progress</th>
+            <th></th>
+        </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseDescription)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CoursePhoto)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th></th>
-    </tr>
+        @foreach (var item in Model)
+        {
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseDescription)
-        </td>
-        <td>
-            <img src="~/imgstore/courses/@item.CoursePhoto" alt="@item.CourseName" title="@item.CoursePhoto" width="30%" />
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActive)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CourseId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CourseId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CourseId })
-        </td>
-    </tr>
-}
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseDescription)
+                </td>
+                <td>@item.Lessons.Count()</td>
+                <td>
+                    <img src="~/imgstore/courses/@item.CoursePhoto" alt="@item.CourseName" title="@item.CoursePhoto" width="30%" />
+                </td>
+                <td>
+                    @if (item.Completion == true)
+                    {
+                        <span style="color: green">Completed</span>
+                    }
+                    else
+                    {
+                        <span style="color: red">Not Completed</span>
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-primary">
+                        <a href="@Url.Action("Details","Courses", new { id = item.CourseId })">
+                            @if (item.Completion == false)
+                            {
+                                <span>Start Course</span>
+                            }
+                            else
+                            {
+                                <span>Redo Course</span>
+                            }
+                        </a>
+                    </button>
+                </td>
+            </tr>
 
-</table>
+        }
+
+    </table>
+</div>
